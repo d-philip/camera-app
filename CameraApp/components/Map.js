@@ -1,8 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions} from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
 export default function Map() {
+  const [markers, setMarkers] = React.useState([]);
 
   return (
       <View>
@@ -14,14 +15,25 @@ export default function Map() {
             longitudeDelta: 0.0421,
           }}
           style={styles.map}
-        />
+
+        >
+          {markers.map((marker, index) => (
+            <Marker
+              key={index}
+              coordinate={marker.latlng}
+              title={marker.title}
+              description={marker.description}
+            />
+          ))}
+        </MapView>
       </View>
   );
 }
 
 const styles = StyleSheet.create({
   map: {
-    width: Dimensions.get('window').width-20,
-    height: Dimensions.get('window').height-80,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+    marginTop: 90,
   },
 });
