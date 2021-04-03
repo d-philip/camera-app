@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import Cam from '../components/Cam';
 
 export default function CameraPage() {
   return (
     <View style={styles.container}>
-      <Text>Camera</Text>
+      <Cam />
     </View>
   )
 }
