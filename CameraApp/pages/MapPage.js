@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import Map from '../components/Map';
 
 export default function MapPage() {
   return (
     <View style={styles.container}>
-      <Text>Map</Text>
+      <Map />
     </View>
   )
 }
