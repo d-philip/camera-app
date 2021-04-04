@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
 import { Camera } from 'expo-camera';
+import { IconButton, Colors } from 'react-native-paper';
 
 export default function Cam() {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+
+  const handleCameraFlip = () => {
+    setType(
+      type === Camera.Constants.Type.back
+        ? Camera.Constants.Type.front
+        : Camera.Constants.Type.back
+    );
+  }
 
   useEffect(() => {
     (async () => {
@@ -24,17 +33,20 @@ export default function Cam() {
       <View>
         <Camera style={styles.camera} type={type}>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
+          <IconButton
+            icon="camera-switch"
+            color={Colors.white}
             style={styles.button}
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}>
-            <Text style={styles.text}> Flip </Text>
-          </TouchableOpacity>
+            size={40}
+            onPress={handleCameraFlip}
+          />
+          <IconButton
+            icon="camera"
+            color={Colors.white}
+            style={styles.button}
+            size={40}
+            onPress={() => console.log('Take Picture')}
+          />
         </View>
       </Camera>
       </View>
