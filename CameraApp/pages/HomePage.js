@@ -1,12 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { AuthContext } from "../App";
 import Header from '../components/Header';
 import CameraPage from '../pages/CameraPage';
 import MapPage from '../pages/MapPage';
 import PhotoPage from '../pages/PhotoPage';
+import Login from '../components/Login';
 
 export default function HomePage() {
+  const { state, dispatch } = React.useContext(AuthContext);
   const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
@@ -21,24 +24,25 @@ export default function HomePage() {
     photos: PhotoPage,
   });
 
-  const renderTabBar = props => {
-    <TabBar
-      {...props}
-      getLabelText={({ routes }) => routes.title}
-    />
-  };
-
-  return (
-    <View style={styles.container}>
-      <TabView
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={{ width: layout.width }}
-        // renderTabBar={renderTabBar}
-      />
-    </View>
-  )
+  if (state.isAuthenticated === false){
+    return (
+      <View style={styles.container}>
+        <Login />
+      </View>
+    )
+  }
+  else {
+    return (
+      <View style={styles.container}>
+        <TabView
+          navigationState={{ index, routes }}
+          renderScene={renderScene}
+          onIndexChange={setIndex}
+          initialLayout={{ width: layout.width }}
+        />
+      </View>
+    )
+  }
 }
 
 const styles = StyleSheet.create({

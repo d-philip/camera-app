@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
 import { Camera } from 'expo-camera';
 import { IconButton, Colors } from 'react-native-paper';
+import Logout from './Logout';
 
 export default function Cam() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -55,6 +56,7 @@ export default function Cam() {
               size={40}
               onPress={() => handleCameraCapture()}
             />
+            <Logout />
           </View>
         </Camera>
       </View>
