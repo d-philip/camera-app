@@ -6,6 +6,7 @@ import { IconButton, Colors } from 'react-native-paper';
 export default function Cam() {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+  let camera: Camera;
 
   const handleCameraFlip = () => {
     setType(
@@ -13,7 +14,14 @@ export default function Cam() {
         ? Camera.Constants.Type.front
         : Camera.Constants.Type.back
     );
-  }
+  };
+
+  const handleCameraCapture = async () => {
+    if (camera) {
+      const photo = await camera.takePictureAsync();
+      console.log(photo);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -31,24 +39,24 @@ export default function Cam() {
 
   return (
       <View>
-        <Camera style={styles.camera} type={type}>
-        <View style={styles.buttonContainer}>
-          <IconButton
-            icon="camera-switch"
-            color={Colors.white}
-            style={styles.button}
-            size={40}
-            onPress={handleCameraFlip}
-          />
-          <IconButton
-            icon="camera"
-            color={Colors.white}
-            style={styles.button}
-            size={40}
-            onPress={() => console.log('Take Picture')}
-          />
-        </View>
-      </Camera>
+        <Camera style={styles.camera} type={type} ref={(r) => { camera = r }}>
+          <View style={styles.buttonContainer}>
+            <IconButton
+              icon="camera-switch"
+              color={Colors.white}
+              style={styles.button}
+              size={40}
+              onPress={() => handleCameraFlip()}
+            />
+            <IconButton
+              icon="camera"
+              color={Colors.white}
+              style={styles.button}
+              size={40}
+              onPress={() => handleCameraCapture()}
+            />
+          </View>
+        </Camera>
       </View>
   );
 }
@@ -64,10 +72,9 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
   },
   button: {
-    flex: 0.1,
+    flex: 1,
     alignSelf: 'flex-end',
     alignItems: 'center',
-    marginLeft: 20,
     marginBottom: 20,
   },
   text: {

@@ -2,8 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, View, useWindowDimensions} from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import HomePage from './pages/HomePage';
+import * as FirebaseCore from 'expo-firebase-core';
 
 export default function App() {
+
   return (
     <PaperProvider>
       <View style={styles.container}>
