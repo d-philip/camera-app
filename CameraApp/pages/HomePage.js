@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Header from '../components/Header';
 import CameraPage from '../pages/CameraPage';
 import MapPage from '../pages/MapPage';
@@ -21,6 +21,13 @@ export default function HomePage() {
     photos: PhotoPage,
   });
 
+  const renderTabBar = props => {
+    <TabBar
+      {...props}
+      getLabelText={({ routes }) => routes.title}
+    />
+  };
+
   return (
     <View style={styles.container}>
       <TabView
@@ -28,6 +35,7 @@ export default function HomePage() {
         renderScene={renderScene}
         onIndexChange={setIndex}
         initialLayout={{ width: layout.width }}
+        // renderTabBar={renderTabBar}
       />
     </View>
   )
