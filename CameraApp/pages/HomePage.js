@@ -24,7 +24,7 @@ export default function HomePage() {
     photos: PhotoPage,
   });
 
-  if (state.isAuthenticated === false){
+  if (state.isAuthenticated === false || state.email === undefined){
     return (
       <View style={styles.container}>
         <Login />

@@ -1,10 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { Camera } from 'expo-camera';
+import * as FileSystem from 'expo-file-system';
+import { AuthContext } from "../App";
+import config from '../app.json';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 import { IconButton, Colors } from 'react-native-paper';
 import Logout from './Logout';
 
+const firebaseConfig = config.expo.web.config.firebase;
+if (!firebase.apps.length) {
+   firebase.initializeApp(firebaseConfig);
+} else {
+   firebase.app();
+}
+
+const db = firebase.firestore();
+
 export default function Cam() {
+  const { state, dispatch } = React.useContext(AuthContext);
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   let camera: Camera;
@@ -20,7 +35,11 @@ export default function Cam() {
   const handleCameraCapture = async () => {
     if (camera) {
       const photo = await camera.takePictureAsync();
-      console.log(photo);
+      const filename = FileSystem.documentDirectory + Date.now().toString() + '.jpg'
+      FileSystem.moveAsync({from: photo.uri, to: filename})
+      db.collection(state.email).doc(Date.now().toString()).set({
+        filepath: filename,
+      });
     }
   };
 

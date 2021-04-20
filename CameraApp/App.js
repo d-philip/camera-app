@@ -1,9 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, View, useWindowDimensions} from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
-import HomePage from './pages/HomePage';
-import * as FirebaseCore from 'expo-firebase-core';
+import config from './app.json';
+import * as firebase from 'firebase';
 
+const firebaseConfig = config.expo.web.config.firebase;
+if (!firebase.apps.length) {
+   firebase.initializeApp(firebaseConfig);
+} else {
+   firebase.app();
+}
+
+import HomePage from './pages/HomePage';
 export const AuthContext = React.createContext();
 
 const initialState = {
@@ -17,7 +25,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         isAuthenticated: true,
-        email: action.payload.user,
+        email: action.payload,
       };
     case "logout":
       return {
