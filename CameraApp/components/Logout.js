@@ -12,7 +12,9 @@ export default function Logout(){
 
   return(
     <View>
+
       <FAB
+        label="Logout"
         style={styles.fab}
         small
         icon="exit-to-app"
@@ -25,8 +27,7 @@ export default function Logout(){
 const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
-    margin: 16,
-    right: 0,
-    bottom: 0,
+    backgroundColor: '#767B91',
+    top: 7,
   },
 })

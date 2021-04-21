@@ -8,7 +8,6 @@ import config from '../app.json';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { IconButton, Colors } from 'react-native-paper';
-import Logout from './Logout';
 import { v4 as uuidv4 } from 'uuid';
 
 const firebaseConfig = config.expo.web.config.firebase;
@@ -99,7 +98,6 @@ export default function Cam() {
               size={40}
               onPress={() => handleCameraCapture()}
             />
-            <Logout />
           </View>
         </Camera>
       </View>

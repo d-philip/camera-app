@@ -5,6 +5,7 @@ import { AuthContext } from "../App";
 import config from '../app.json';
 import * as firebase from 'firebase'
 import 'firebase/firestore';
+import Logout from './Logout';
 
 const firebaseConfig = config.expo.web.config.firebase;
 if (!firebase.apps.length) {
@@ -80,11 +81,12 @@ export default function PhotoList(){
         <ScrollView style={styles.scroll}>
           {photoView}
         </ScrollView>
+        <Logout />
         <IconButton
           icon="refresh"
           style={styles.refresh}
-          color="#2A324B"
-          size={25}
+          color="#767B91"
+          size={30}
           onPress={() => loadPhotos()}
         />
       </Surface>
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
   },
   surface: {
     padding: 6,
-    height: "90%",
+    height: "95%",
     width: 370,
     borderRadius: 5,
     alignItems: 'flex-start',
@@ -121,6 +123,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   refresh: {
-    marginLeft: 315,
+    marginLeft: 310,
   },
 });
