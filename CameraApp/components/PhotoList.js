@@ -22,8 +22,11 @@ export default function PhotoList(){
   const loadPhotos = () => {
     db.collection(state.email).get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        const photoLocation = doc.data().filepath;
-        updatePhotos(photoLocation);
+        const photo = {};
+        photo[doc.id] = doc.data();
+        if (!userPhotos.includes(doc.id)) {
+          updatePhotos(photo);
+        }
       });
     });
   };
@@ -41,16 +44,25 @@ export default function PhotoList(){
     photoView = <Text>No photos saved. Go to the camera page to take some pics!</Text>
   }
   else {
-    console.log("Photos Full: ", userPhotos);
-    photoView = userPhotos.map((item, i) => (
-      <List.Item
-        key={i}
-        title="Date"
-        description="Location"
-        titleStyle={styles.title}
-        left={props => <Image style={styles.image} source={{uri: item}} />}
-      />
-    ))
+    photoView = userPhotos.map((photo, i) => {
+      const id = Object.keys(photo)[0];
+      var description;
+      if (photo[id].location === "null"){ description = 'Location Not Found'; }
+      else{ description = photo[id].location.coords.latitude.toFixed(3) + ', ' + photo[id].location.coords.latitude.toFixed(3); }
+      const date = new Date(Date(photo[id].timestamp * 1000));
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const formattedDate = Intl.DateTimeFormat('en-US', options).format(date);
+
+      return(
+        <List.Item
+          key={i}
+          title={formattedDate}
+          description={description}
+          titleStyle={styles.title}
+          left={props => <Image style={styles.image} source={{uri: photo[id].filepath}} />}
+        />
+      )
+    })
   }
 
   return(
@@ -79,11 +91,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'flex-start',
     justifyContent: 'center',
-    backgroundColor: '#ffc',
+    backgroundColor: '#E1E5EE',
     elevation: 3,
   },
   title: {
-    color: 'black',
+    color: '#2A324B',
   },
   image: {
     width: 125,

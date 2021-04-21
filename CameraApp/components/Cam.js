@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as FileSystem from 'expo-file-system';
+import * as Location from 'expo-location';
 import { AuthContext } from "../App";
 import config from '../app.json';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { IconButton, Colors } from 'react-native-paper';
 import Logout from './Logout';
+import { v4 as uuidv4 } from 'uuid';
 
 const firebaseConfig = config.expo.web.config.firebase;
 if (!firebase.apps.length) {
@@ -20,8 +22,11 @@ const db = firebase.firestore();
 
 export default function Cam() {
   const { state, dispatch } = React.useContext(AuthContext);
-  const [hasPermission, setHasPermission] = useState(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState(null);
+  const [hasLocationPermission, setHasLocationPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
   let camera: Camera;
 
   const handleCameraFlip = () => {
@@ -35,26 +40,46 @@ export default function Cam() {
   const handleCameraCapture = async () => {
     if (camera) {
       const photo = await camera.takePictureAsync();
-      const filename = FileSystem.documentDirectory + Date.now().toString() + '.jpg'
+      const filename = FileSystem.documentDirectory + Date.now().toString() + '.jpg';
+      let location = await Location.getCurrentPositionAsync({});
+      console.log(location);
+      setLocation(location);
+
       FileSystem.moveAsync({from: photo.uri, to: filename})
-      db.collection(state.email).doc(Date.now().toString()).set({
+      db.collection(state.email).doc(uuidv4()).set({
         filepath: filename,
+        location: location,
+        timestamp: Date.now().toString(),
       });
     }
   };
 
   useEffect(() => {
+    // request camera permissions
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
+      setHasCameraPermission(status);
+      if (hasCameraPermission !== 'granted') {
+        setErrorMsg('Permission to access camera was denied');
+      }
+    })();
+
+    // request location permissions
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      setHasLocationPermission(status);
+      if (hasLocationPermission !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
     })();
   }, []);
 
-  if (hasPermission === null) {
+  if (hasCameraPermission === null || hasLocationPermission === null) {
     return <View />;
   }
-  if (hasPermission === false) {
-    return <Text>No access to camera. Check settings.</Text>;
+  if (hasCameraPermission === false || hasLocationPermission === false) {
+    return <Text>{errorMsg}</Text>;
   }
 
   return (
