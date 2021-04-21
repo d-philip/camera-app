@@ -42,7 +42,6 @@ export default function Cam() {
       const photo = await camera.takePictureAsync();
       const filename = FileSystem.documentDirectory + Date.now().toString() + '.jpg';
       let location = await Location.getCurrentPositionAsync({});
-      console.log(location);
       setLocation(location);
 
       FileSystem.moveAsync({from: photo.uri, to: filename})

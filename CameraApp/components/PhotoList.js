@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
-import { List, Surface } from 'react-native-paper';
+import { List, Surface, IconButton } from 'react-native-paper';
 import { AuthContext } from "../App";
 import config from '../app.json';
 import * as firebase from 'firebase'
@@ -23,12 +23,20 @@ export default function PhotoList(){
     db.collection(state.email).get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         const photo = {};
-        photo[doc.id] = doc.data();
-        if (!userPhotos.includes(doc.id)) {
+        if (photoExists(doc.id) == false) {
+          photo[doc.id] = doc.data();
           updatePhotos(photo);
         }
       });
     });
+  };
+
+  const photoExists = (id) => {
+    var exists = false;
+    userPhotos.forEach((photo) => {
+      if (photo[id] !== undefined) exists = true;
+    });
+    return exists;
   };
 
   const updatePhotos = async (photo) => {
@@ -39,6 +47,7 @@ export default function PhotoList(){
   useEffect(() => {
     loadPhotos();
   }, []);
+
 
   if (userPhotos.length === 0) {
     photoView = <Text>No photos saved. Go to the camera page to take some pics!</Text>
@@ -62,7 +71,7 @@ export default function PhotoList(){
           left={props => <Image style={styles.image} source={{uri: photo[id].filepath}} />}
         />
       )
-    })
+    });
   }
 
   return(
@@ -71,6 +80,13 @@ export default function PhotoList(){
         <ScrollView style={styles.scroll}>
           {photoView}
         </ScrollView>
+        <IconButton
+          icon="refresh"
+          style={styles.refresh}
+          color="#2A324B"
+          size={25}
+          onPress={() => loadPhotos()}
+        />
       </Surface>
     </View>
   )
@@ -103,5 +119,8 @@ const styles = StyleSheet.create({
   },
   scroll: {
     width: "100%",
-  }
+  },
+  refresh: {
+    marginLeft: 315,
+  },
 });
