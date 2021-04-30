@@ -45,14 +45,14 @@ Install the latest version of npm
 
 ## Usage
 ### Screenshots
-Login Page
-![Login Page](CameraApp/docs/screenshots/login.png)
+Login Page  
+<img src="CameraApp/docs/screenshots/login.png" alt="Login Page" width="300"/>
 
-Camera Page
-![Camera Page](CameraApp/docs/screenshots/camera.png)
+Camera Page  
+<img src="CameraApp/docs/screenshots/camera.png" alt="Camera Page" width="300"/>
 
-Photos Page
-![Photos Page](CameraApp/docs/screenshots/photos.png)
+Photos Page  
+<img src="CameraApp/docs/screenshots/photos.png" alt="Photos Page" width="300"/>
 
-Map Page
-![Map Page](CameraApp/docs/screenshots/map.png)
+Map Page  
+<img src="CameraApp/docs/screenshots/map.png" alt="Map Page" width="300"/>
