@@ -39,9 +39,20 @@ Install the latest version of npm
    ```sh
    expo start
    ```
-  
+
 
 
 
 ## Usage
 ### Screenshots
+Login Page
+![Login Page](CameraApp/docs/screenshots/login.png)
+
+Camera Page
+![Camera Page](CameraApp/docs/screenshots/camera.png)
+
+Photos Page
+![Photos Page](CameraApp/docs/screenshots/photos.png)
+
+Map Page
+![Map Page](CameraApp/docs/screenshots/map.png)
