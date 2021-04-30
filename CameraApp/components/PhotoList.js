@@ -59,8 +59,8 @@ export default function PhotoList(){
       var description;
       if (photo[id].location === "null"){ description = 'Location Not Found'; }
       else{ description = photo[id].location.coords.latitude.toFixed(3) + ', ' + photo[id].location.coords.latitude.toFixed(3); }
-      const date = new Date(Date(photo[id].timestamp * 1000));
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const date = new Date(photo[id].timestamp*1);
+      const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
       const formattedDate = Intl.DateTimeFormat('en-US', options).format(date);
 
       return(
