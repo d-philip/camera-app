@@ -24,12 +24,59 @@ export default function Map() {
       else {
         let location_data = await Location.getCurrentPositionAsync({});
         setLocation(location_data);
-        console.log(location_data);
+        const initMarker = {
+          id: 1,
+          coords: {
+            latitude: location_data.coords.latitude,
+            longitude: location_data.coords.longitude
+          }
+        };
+
+
+        if (state.markers.length == 0) {
+          const newArr = state.markers;
+          newArr.push(initMarker);
+          console.log("Set initial marker: ", newArr);
+          await dispatch({type: "markers", payload: newArr});
+        }
       }
     })();
-  })
 
-  if (location == null) {
+    if (state.markers.length !== state.photos.length){
+      loadMarkers();
+    }
+  });
+
+  const loadMarkers = () => {
+    if (state.photos.length !== 0) {
+      state.photos.forEach(async (photo) => {
+        const id = Object.keys(photo)[0];
+
+        if (markerExists(id) == false) {
+          const marker = {
+            id: id,
+            coords: {
+              latitude: photo[id].location.coords.latitude,
+              longitude: photo[id].location.coords.longitude,
+          }};
+          const newArr = state.markers;
+          newArr.push(marker);
+          console.log("New Marker: ", newArr);
+          await dispatch({type: "markers", payload: newArr});
+        }
+      });
+    }
+  };
+
+  const markerExists = (id) => {
+    var exists = false;
+    state.markers.forEach((marker) => {
+      if (marker[id] !== undefined) exists = true;
+    });
+    return exists;
+  };
+
+  if (location === null) {
     mapView =
     <View>
       <ActivityIndicator animating={true} color='#2A324B' />
@@ -46,16 +93,13 @@ export default function Map() {
         longitudeDelta: 0.0421,
       }}
       style={styles.map}
-
     >
-      {markers.map((marker, index) => (
+      {state.markers.map((marker, i) => (
         <Marker
-          key={index}
-          coordinate={marker.latlng}
-          title={marker.title}
-          description={marker.description}
-        />
-      ))}
+          key={i}
+          coordinate={marker.coords}
+        />))
+      }
     </MapView>
   }
 

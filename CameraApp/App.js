@@ -17,6 +17,8 @@ export const AuthContext = React.createContext();
 const initialState = {
   isAuthenticated: false,
   email: null,
+  photos: [],
+  markers: [],
 };
 
 const reducer = (state, action) => {
@@ -33,6 +35,16 @@ const reducer = (state, action) => {
         isAuthenticated: false,
         email: null,
       };
+    case "photos":
+      return {
+        ...state,
+        photos: action.payload,
+      };
+      case "marker":
+        return {
+          ...state,
+          markers: action.payload,
+        };
     default:
       return state;
   }

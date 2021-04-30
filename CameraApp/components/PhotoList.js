@@ -21,7 +21,7 @@ export default function PhotoList(){
   let photoView;
 
   const loadPhotos = () => {
-    db.collection(state.email).get().then((querySnapshot) => {
+    db.collection(state.email).get().then(async (querySnapshot) => {
       querySnapshot.forEach((doc) => {
         const photo = {};
         if (photoExists(doc.id) == false) {
@@ -29,6 +29,7 @@ export default function PhotoList(){
           updatePhotos(photo);
         }
       });
+      await dispatch({type: "photos", payload: userPhotos});
     });
   };
 
